@@ -42,7 +42,7 @@ The main arguments for `main_experiment.py` are:
 **A minimal example of running INN**:
 
 ```
-python /home/kadraa/INN/main_experiment.py --output_dir "." --dataset_id 1590 --nr_restarts 3 --weight_norm 0.1 --weight_decay 0.01 --seed 0 --interpretable
+python main_experiment.py --output_dir "." --dataset_id 1590 --nr_restarts 3 --weight_norm 0.1 --weight_decay 0.01 --seed 0 --interpretable
 
 ```
 

@@ -1,7 +1,7 @@
 import argparse
 from copy import deepcopy
 import os
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import torch
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts, LambdaLR, SequentialLR
@@ -28,6 +28,26 @@ class Classifier:
         output_directory: str = '.',
         disable_wandb: bool = True,
     ):
+        """Initialize the classifier.
+
+        Args:
+            network_configuration: dict
+                The configuration for the neural network.
+            args: argparse.Namespace
+                The arguments controlling the experiment.
+            categorical_indicator: list
+                A list of booleans indicating whether the corresponding feature is categorical or not.
+            attribute_names: list
+                A list of strings containing the names of the features.
+            model_name: str
+                The name of the model to use.
+            device: str
+                The device to use for training.
+            output_directory: str
+                The directory to save the results.
+            disable_wandb: bool
+                Whether to disable wandb logging.
+        """
         super(Classifier, self).__init__()
 
         self.disable_wandb = disable_wandb
@@ -53,8 +73,22 @@ class Classifier:
         self.softmax_act_func = torch.nn.Softmax(dim=1)
         self.output_directory = output_directory
 
-    def fit(self, X, y):
+    def fit(
+        self,
+        X: Union[List, np.ndarray, pd.DataFrame],
+        y: Union[List, np.ndarray, pd.DataFrame],
+    ) -> Classifier:
+        """Fit the classifier to the data.
+        Args:
+            X: list, np.ndarray, pd.DataFrame
+                The input data.
+            y: list, np.ndarray, pd.DataFrame
+                The target data.
 
+        Returns:
+            self: Classifier
+                The fitted classifier.
+        """
         if isinstance(X, pd.DataFrame):
             X = X.to_numpy()
         elif isinstance(X, list):
@@ -212,8 +246,28 @@ class Classifier:
 
         return self
 
-    def predict(self, X_test, y_test=None, return_weights=True):
+    def predict(
+        self,
+        X_test: Union[List, np.ndarray, pd.DataFrame],
+        y_test: Union[List, np.ndarray, pd.DataFrame] = None,
+        return_weights: bool = True,
+    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
+        """
+        Predicts the output for the given input data.
 
+        Args:
+            X_test: list, np.ndarray or pd.DataFrame
+                The input data for which the output should be predicted.
+            y_test: list, np.ndarray or pd.DataFrame
+                The ground truth labels for the given input data.
+            return_weights: bool
+                Whether to return the importance weights or not.
+
+        Returns:
+            predictions, weights: np.ndarray or Tuple[np.ndarray, np.ndarray]
+                The predicted output for the given input data and the importance weights
+                if requested.
+        """
         # check if X_test is a DataFrame
         if isinstance(X_test, pd.DataFrame):
             X_test = X_test.to_numpy()

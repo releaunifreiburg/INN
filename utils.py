@@ -1,15 +1,14 @@
 from typing import Dict, List, Tuple
 
 import numpy as np
-import pandas as pd
 import openml
-import torch
-
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OrdinalEncoder, LabelEncoder, StandardScaler, OneHotEncoder, TargetEncoder
+import pandas as pd
 from sklearn.compose import ColumnTransformer
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OrdinalEncoder, LabelEncoder, StandardScaler, OneHotEncoder, TargetEncoder
 from scipy.stats import rankdata
+import torch
 
 
 def prepare_data_for_cutmix(
@@ -17,7 +16,21 @@ def prepare_data_for_cutmix(
     y: torch.Tensor,
     augmentation_prob: float = 0.5,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, float]:
+    """Generate the data after the cutmix augmentation.
 
+    Args:
+        x: torch.Tensor
+            The input data.
+        y: torch.Tensor
+            The target data.
+        augmentation_prob: float
+            The probability of applying the augmentation.
+
+    Returns:
+        x, y, y_shuffled, lam: Tuple[torch.Tensor, torch.Tensor, torch.Tensor, float]
+            The augmented data, the labels of the first example of the pair,
+            the labels of the second example of the pair and the lambda value.
+    """
     # Shuffle the data
     indices = torch.randperm(x.size(0))
     x_shuffled = x[indices]
@@ -47,10 +60,27 @@ def prepare_data_for_cutmix(
 
 def prepare_data_for_mixup(
     x: torch.Tensor,
-    y: torch.Tensor, numerical_features: List,
+    y: torch.Tensor,
+    numerical_features: List,
     augmentation_prob: float = 0.5,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, float]:
+    """Generate the data after the mixup augmentation.
 
+    Args:
+        x: torch.Tensor
+            The input data.
+        y: torch.Tensor
+            The target data.
+        numerical_features: list
+            A list with the indices of numerical features.
+        augmentation_prob: float
+            The probability of applying the augmentation.
+
+    Returns:
+        x, y, y_shuffled, lam: Tuple[torch.Tensor, torch.Tensor, torch.Tensor, float]
+            The augmented data, the labels of the first example of the pair,
+            the labels of the second example of the pair and the lambda value.
+    """
     # Shuffle the data
     indices = torch.randperm(x.size(0))
     x_shuffled = x[indices]
@@ -78,7 +108,29 @@ def prepare_data_for_mixup(
     return x, y, y_shuffled, lam
 
 
-def prepare_data_for_cutout(x: torch.Tensor, y: torch.Tensor, numerical_features: List, cut_mix_prob: float = 0.5) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, float]:
+def prepare_data_for_cutout(
+    x: torch.Tensor,
+    y: torch.Tensor,
+    numerical_features: List,
+    cut_mix_prob: float = 0.5,
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, float]:
+    """Generate the data after the mixup augmentation.
+
+    Args:
+        x: torch.Tensor
+            The input data.
+        y: torch.Tensor
+            The target data.
+        numerical_features: list
+            A list with the indices of numerical features.
+        augmentation_prob: float
+            The probability of applying the augmentation.
+
+    Returns:
+        x, y, y_shuffled, lam: Tuple[torch.Tensor, torch.Tensor, torch.Tensor, float]
+            The augmented data, the labels of the first example of the pair,
+            the labels of the second example of the pair and the lambda value.
+    """
 
     # Shuffle the data
     indices = torch.randperm(x.size(0))

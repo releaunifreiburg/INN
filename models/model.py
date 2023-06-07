@@ -1,7 +1,7 @@
 import argparse
 from copy import deepcopy
 import os
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 
 import torch
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts, LambdaLR, SequentialLR
@@ -12,7 +12,7 @@ import wandb
 
 from models.hypernetwork import HyperNet
 from models.tabresnet import TabResNet
-from utils import augment_data, generate_weight_importances_top_k
+from utils import augment_data
 
 
 class Classifier:
@@ -77,7 +77,7 @@ class Classifier:
         self,
         X: Union[List, np.ndarray, pd.DataFrame],
         y: Union[List, np.ndarray, pd.DataFrame],
-    ) -> Classifier:
+    ):
         """Fit the classifier to the data.
         Args:
             X: list, np.ndarray, pd.DataFrame

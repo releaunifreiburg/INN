@@ -63,7 +63,7 @@ class HyperNet(nn.Module):
         self,
         in_features: int,
         output_features: int,
-    ) -> self.BasicBlock:
+    ):
         """Creates a residual block.
 
         Args:

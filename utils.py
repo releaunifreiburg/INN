@@ -176,7 +176,7 @@ def fgsm_attack(
     x: torch.Tensor,
     y: torch.Tensor,
     model: torch.nn.Module,
-    criterion: torch.nn._Loss,
+    criterion,
     augmentation_prob: float,
     epsilon: float,
 ) -> torch.Tensor:
@@ -266,7 +266,7 @@ def augment_data(
     y: torch.Tensor,
     numerical_features: List,
     model: torch.nn.Module,
-    criterion: torch.nn._Loss,
+    criterion,
     augmentation_prob: float = 0.5
 ) -> Tuple:
     """Randomly chose a data augmentation technique and apply it.

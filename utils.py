@@ -47,7 +47,7 @@ def prepare_data_for_cutmix(
             cut_column_indices = torch.as_tensor(
                 np.random.choice(
                     range(x.size(1)),
-                    max(1, np.int32(x.size(1) * lam)),
+                    max(1, np.int32(x.size(1) * (1 - lam))),
                     replace=False,
                 ),
                 dtype=torch.int64,
@@ -97,7 +97,7 @@ def prepare_data_for_mixup(
             cut_column_indices = torch.as_tensor(
                 np.random.choice(
                     numerical_features,
-                    max(1, np.int32(len(numerical_features) * lam)),
+                    max(1, np.int32(len(numerical_features) * (1 - lam))),
                     replace=False,
                 ),
                 dtype=torch.int64,
@@ -146,7 +146,7 @@ def prepare_data_for_cutout(
         for i in range(x.size(0)):
             cut_column_indices = np.random.choice(
                 range(x.size(1)),
-                max(1, np.int32(x.size(1) * lam)),
+                max(1, np.int32(x.size(1) * (1 - lam))),
                 replace=False,
             )
 
@@ -251,7 +251,7 @@ def random_noise(
             cut_column_indices = torch.as_tensor(
                 np.random.choice(
                     range(x.size(1)),
-                    max(1, np.int32(x.size(1) * lam)),
+                    max(1, np.int32(x.size(1) * (1 - lam))),
                     replace=False,
                 ),
                 dtype=torch.int64,
